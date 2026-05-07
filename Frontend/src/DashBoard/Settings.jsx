@@ -2,8 +2,8 @@ import React from 'react'
 import DashboardPage from './DashboardPage'
 import { dashboardPages } from './pageData'
 
-function Document() {
-  return <DashboardPage {...dashboardPages.document} />
+function Settings() {
+  return <DashboardPage {...dashboardPages.settings} />
 }
 
-export default Document
+export default Settings

@@ -5,7 +5,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import Loader from '../../Components/Loader';
 
-const typeOptions = ["🔴 Sick", "🟡 Casual", "🔵 Annual"];
+const typeOptions = ["Sick", "Casual", "Annual"];
 
 function TimeTools() {
     const loaderPolicies = useLoaderData();
@@ -14,19 +14,19 @@ function TimeTools() {
     const [showModal, setShowModal] = useState(false);
     const [editingPolicy, setEditingPolicy] = useState(null);
     const [loading, setLoading] = useState(!loaderPolicies);
-
-    useEffect(() => {
-        if (loaderPolicies)
-            setLoading(false)
-    }, [loaderPolicies]);
-    
-    if (loading) return <Loader />
-
     const [newPolicy, setNewPolicy] = useState({
         title: "",
         policy_date: "",
         type: typeOptions[0]
     });
+
+    useEffect(() => {
+        if (loaderPolicies) {
+            setLoading(false);
+        }
+    }, [loaderPolicies]);
+
+    if (loading) return <Loader />;
 
     const handleChange = (e) => {
         setNewPolicy({
@@ -35,28 +35,28 @@ function TimeTools() {
         });
     };
 
-    // add policy btn
     const handleAddPolicy = async () => {
         if (!newPolicy.title || !newPolicy.policy_date || !newPolicy.type) {
             toast.error("All fields are required");
             return;
         }
+
         try {
             const res = await axios.post(
-                "http://localhost:5000/api/policies", newPolicy,
+                "http://localhost:5000/api/policies",
+                newPolicy,
                 { withCredentials: true }
             );
             setPolicies([res.data, ...policies]);
             closeModal();
-            toast.success("Policy added Successfully!")
+            toast.success("Leave request submitted successfully!");
         } catch (err) {
-            toast.error(err.response?.data?.error || "Error updating policy");
+            toast.error(err.response?.data?.error || "Error submitting leave request");
         }
     };
 
     const formatDateForInput = (isoDate) => isoDate.split('T')[0];
 
-    //edit policy
     const handleEditClick = (policy) => {
         setEditingPolicy(policy);
         setNewPolicy({
@@ -66,7 +66,7 @@ function TimeTools() {
         });
         setShowModal(true);
     };
-    //update policy
+
     const handleUpdatePolicy = async () => {
         if (!newPolicy.title || !newPolicy.policy_date || !newPolicy.type) {
             toast.error("All fields are required");
@@ -74,9 +74,7 @@ function TimeTools() {
         }
 
         try {
-            // Convert date to ISO format (YYYY-MM-DD) before sending
             const isoDate = new Date(newPolicy.policy_date).toISOString().split('T')[0];
-
             const res = await axios.put(
                 `http://localhost:5000/api/policies/${editingPolicy.id}`,
                 {
@@ -87,42 +85,36 @@ function TimeTools() {
                 { withCredentials: true }
             );
 
-            // Update the policy in local state
             setPolicies(prev =>
                 prev.map(p => (p.id === editingPolicy.id ? res.data : p))
             );
-
-            // Close modal and reset
             closeModal();
-            toast.success("Policy updated successfully!");
+            toast.success("Leave request updated successfully!");
         } catch (err) {
-            toast.error(err.response?.data?.error || "Error updating policy");
+            toast.error(err.response?.data?.error || "Error updating leave request");
         }
     };
 
-
-    //delete btn
     const handleDeletePolicy = (policyId) => {
-        //toast modla poppup
         toast(
             (t) => (
-                <div className="p-3 bg-white rounded shadow">
-                    <p className="text-gray-800 mb-2">Delete this policy?</p>
+                <div className="rounded bg-white p-3 shadow">
+                    <p className="mb-2 text-gray-800">Delete this leave request?</p>
                     <div className="flex justify-end gap-2">
                         <button
-                            className="px-2 py-1 bg-gray-200 rounded"
+                            className="rounded bg-gray-200 px-2 py-1"
                             onClick={() => toast.remove(t.id)} >
                             Cancel
                         </button>
                         <button
-                            className="px-2 py-1 bg-red-600 text-white rounded"
+                            className="rounded bg-red-600 px-2 py-1 text-white"
                             onClick={async () => {
                                 try {
                                     await axios.delete(`http://localhost:5000/api/policies/${policyId}`, { withCredentials: true });
                                     setPolicies(prev => prev.filter(p => p.id !== policyId));
-                                    toast.success("Policy deleted successfully!");
+                                    toast.success("Leave request deleted successfully!");
                                 } catch (err) {
-                                    toast.error(err.response?.data?.error || "Error deleting policy");
+                                    toast.error(err.response?.data?.error || "Error deleting leave request");
                                 }
                                 toast.remove(t.id);
                             }}>
@@ -131,7 +123,7 @@ function TimeTools() {
                     </div>
                 </div>
             ),
-            { duration: Infinity } 
+            { duration: Infinity }
         );
     };
 
@@ -148,33 +140,33 @@ function TimeTools() {
     return (
         <div>
             <div className='mb-4 space-y-14'>
-                <div className='flex justify-between items-center'>
+                <div className='flex items-center justify-between'>
                     <div>
-                        <h1 className='text-xl font-bold text-gray-800'>Time Tools</h1>
-                        <p className='text-md text-gray-700'>Time tools streamline productivity, optimize efficiency</p>
+                        <h1 className='text-xl font-bold text-gray-800'>Time & Leave</h1>
+                        <p className='text-md text-gray-700'>Manage employee leave requests, policy limits, and attendance planning.</p>
                     </div>
-                    <button className='h-8 px-3 rounded-md bg-purple-600 text-white hover:bg-purple-700 cursor-pointer'>
+                    <button className='h-8 cursor-pointer rounded-md bg-purple-600 px-3 text-white hover:bg-purple-700'>
                         Get the app
                     </button>
                 </div>
 
                 <div className='mt-3 flex items-center justify-between'>
-                    <div className="inline-flex bg-gray-100 p-1 rounded-md">
+                    <div className="inline-flex rounded-md bg-gray-100 p-1">
                         <button
                             onClick={() => setActiveTab("timeTracking")}
-                            className={`px-2 py-2 text-sm rounded-md transition-all duration-200
+                            className={`rounded-md px-2 py-2 text-sm transition-all duration-200
                                 ${activeTab === "timeTracking"
-                                    ? "bg-white text-gray-900 shadow font-medium"
-                                    : "text-gray-600 "}`}>
-                            Time Tracking
+                                    ? "bg-white font-medium text-gray-900 shadow"
+                                    : "text-gray-600"}`}>
+                            Attendance
                         </button>
                         <button
                             onClick={() => setActiveTab("timeOff")}
-                            className={`px-2 py-2 text-sm rounded-md transition-all duration-200
+                            className={`rounded-md px-2 py-2 text-sm transition-all duration-200
                                 ${activeTab === "timeOff"
-                                    ? "bg-white text-gray-900 shadow font-medium"
+                                    ? "bg-white font-medium text-gray-900 shadow"
                                     : "text-gray-600"}`}>
-                            Time Off
+                            Leave Requests
                         </button>
                     </div>
                 </div>
@@ -182,55 +174,55 @@ function TimeTools() {
 
             {activeTab === "timeOff" ? (
                 <div>
-                    <div className='flex justify-between sm:gap-8 items-center mb-6'>
+                    <div className='mb-6 flex items-center justify-between sm:gap-8'>
                         <div>
-                            <h1 className='text-xl font-semibold'>Sick Leave Policy</h1>
+                            <h1 className='text-xl font-semibold'>Leave Requests</h1>
                             <p className='text-gray-600'>
-                                Employees can be enrolled in one sick policy. Make sure that your policy is compliant with your state rules.
+                                Employees can request Sick, Casual, or Annual leave within their yearly balance.
                             </p>
                         </div>
                         <button
-                            className="px-4 py-2 font-bold rounded-md border bg-white hover:bg-gray-50 cursor-pointer text-sm md:text-md whitespace-nowrap"
+                            className="whitespace-nowrap rounded-md border bg-white px-4 py-2 text-sm font-bold hover:bg-gray-50 md:text-md"
                             onClick={() => setShowModal(true)}>
-                            + Add Policy
+                            + Request Leave
                         </button>
                     </div>
 
                     {showModal && (
-                        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/30">
-                            <div className="bg-white shadow-xl p-6 rounded-lg w-full max-w-md space-y-4">
-                                <h2 className="text-xl font-semibold text-gray-800 border-b pb-2">
-                                    {editingPolicy ? "Edit Policy" : "Add New Policy"}
+                        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
+                            <div className="w-full max-w-md space-y-4 rounded-lg bg-white p-6 shadow-xl">
+                                <h2 className="border-b pb-2 text-xl font-semibold text-gray-800">
+                                    {editingPolicy ? "Edit Leave Request" : "New Leave Request"}
                                 </h2>
                                 <form className='space-y-4'>
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Policy Title</label>
+                                        <label className="mb-1 block text-sm font-medium text-gray-700">Request Title</label>
                                         <input
                                             type="text"
                                             name="title"
                                             placeholder='Title'
-                                            className='border px-2 py-1 rounded w-full'
+                                            className='w-full rounded border px-2 py-1'
                                             value={newPolicy.title}
                                             onChange={handleChange}
                                         />
                                     </div>
 
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Effective Date</label>
+                                        <label className="mb-1 block text-sm font-medium text-gray-700">Leave Date</label>
                                         <input
                                             type="date"
                                             name="policy_date"
-                                            className='border px-2 py-1 rounded w-full'
+                                            className='w-full rounded border px-2 py-1'
                                             value={newPolicy.policy_date}
                                             onChange={handleChange}
                                         />
                                     </div>
 
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Policy Type</label>
+                                        <label className="mb-1 block text-sm font-medium text-gray-700">Leave Type</label>
                                         <select
                                             name="type"
-                                            className='border px-2 py-1 rounded w-full'
+                                            className='w-full rounded border px-2 py-1'
                                             value={newPolicy.type}
                                             onChange={handleChange}>
                                             {typeOptions.map((t) => <option key={t}>{t}</option>)}
@@ -240,16 +232,16 @@ function TimeTools() {
                                     <div className='flex justify-end gap-2'>
                                         <button
                                             type='button'
-                                            className='px-3 py-1 bg-gray-200 rounded hover:bg-gray-300'
+                                            className='rounded bg-gray-200 px-3 py-1 hover:bg-gray-300'
                                             onClick={closeModal}>
                                             Cancel
                                         </button>
 
                                         <button
                                             type='button'
-                                            className='px-3 py-1 bg-purple-600 text-white rounded hover:bg-purple-700'
+                                            className='rounded bg-purple-600 px-3 py-1 text-white hover:bg-purple-700'
                                             onClick={editingPolicy ? handleUpdatePolicy : handleAddPolicy}>
-                                            {editingPolicy ? "Update Policy" : "Add Policy"}
+                                            {editingPolicy ? "Update Request" : "Submit Request"}
                                         </button>
                                     </div>
                                 </form>
@@ -264,8 +256,8 @@ function TimeTools() {
                     />
                 </div>
             ) : (
-                <div className='text-center text-red-500 text-xxl font-bold py-16 px-16'>
-                    No Time tracking here now
+                <div className='px-16 py-16 text-center text-xl font-bold text-gray-600'>
+                    Attendance tracking is ready for future check-in and shift records.
                 </div>
             )}
         </div>

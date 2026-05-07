@@ -14,6 +14,9 @@ import axios from "axios";
 function SideBar({ onLinkClick }) {
 
     const navigate = useNavigate();
+    const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
+    const displayName = storedUser.name || "Logged in user";
+    const displayEmail = storedUser.email || "No email available";
 
     const handleLogout = async () => {
         try {
@@ -24,6 +27,7 @@ function SideBar({ onLinkClick }) {
             );
 
             localStorage.removeItem("LoggedIn");
+            localStorage.removeItem("user");
             navigate("/signin");
         } catch (err) {
             console.error("Logout failed:", err);
@@ -79,18 +83,18 @@ function SideBar({ onLinkClick }) {
                             {({ isActive }) => (
                                 <>
                                     <Clock9 className={isActive ? "text-purple-900" : ""} />
-                                    <span>Time tools</span>
+                                    <span>Time & Leave</span>
                                 </>
                             )}
                         </NavLink>
                     </li>
                     <li className='mb-2'>
                         <NavLink
-                            to='/dashboard/benefited' onClick={onLinkClick}
+                            to='/dashboard/benefits' onClick={onLinkClick}
                             className={({ isActive }) =>
                                 `flex items-center gap-2 p-2 rounded hover:bg-gray-200 ${isActive ? 'bg-gray-200' : ''} `}>
                             <ChartColumn />
-                            <span>Benefited</span>
+                            <span>Benefits</span>
                         </NavLink>
                     </li>
                     <li className='mb-2'>
@@ -119,7 +123,7 @@ function SideBar({ onLinkClick }) {
                             {({ isActive }) => (
                                 <>
                                     <Search className={isActive ? "text-purple-900" : ""} />
-                                    <span>Job & Referances</span>
+                                    <span>Job & References</span>
                                 </>
                             )}
                         </NavLink>
@@ -130,7 +134,7 @@ function SideBar({ onLinkClick }) {
                             className={({ isActive }) =>
                                 `flex items-center gap-2 p-2 rounded hover:bg-gray-200 ${isActive ? 'bg-gray-200' : ''} `}>
                             <Newspaper />
-                            <span>Document</span>
+                            <span>Documents</span>
                         </NavLink>
                     </li>
                 </ul>
@@ -140,15 +144,17 @@ function SideBar({ onLinkClick }) {
             <div className='border-t mr-4 ml-4 border-gray-300'></div>
             <div className='shrink-0 sticky bottom-0 bg-white px-4 py-2'>
                 <NavLink
-                    to='/setting'
+                    to='/dashboard/setting'
+                    onClick={onLinkClick}
                     className={({ isActive }) =>
                         `flex items-center gap-2 p-2 rounded hover:bg-gray-200 ${isActive ? 'bg-gray-200' : ''}`}>
                     <Settings />
-                    <span>Setting</span>
+                    <span>Settings</span>
                 </NavLink>
                 <div className='mb-3'>
                     <NavLink
-                        to="/help"
+                        to="/dashboard/support"
+                        onClick={onLinkClick}
                         className={({ isActive }) =>
                             `flex items-center gap-2 p-2 rounded-md hover:bg-gray-200 ${isActive ? 'bg-gray-200' : ''}`}>
                         <ShieldQuestionMark />
@@ -167,8 +173,8 @@ function SideBar({ onLinkClick }) {
                     <div className="flex items-center gap-3">
                         <UserCircle />
                         <div>
-                            <p className="text-sm font-medium">Shahid Miah</p>
-                            <p className="text-xs text-gray-400">hello@wavespace.agency</p>
+                            <p className="text-sm font-medium">{displayName}</p>
+                            <p className="text-xs text-gray-400">{displayEmail}</p>
                         </div>
                     </div>
                     <ChevronDown />

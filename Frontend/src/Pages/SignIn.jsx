@@ -36,6 +36,7 @@ function SignIn() {
       toast.success(res.data.message || "Signed in successfully!");
 
       localStorage.setItem("LoggedIn", "true");
+      localStorage.setItem("user", JSON.stringify(res.data.user));
       navigate("/dashboard");
     } catch (err) {
       toast.error(err.response?.data?.error || "Invalid credentials");

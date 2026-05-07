@@ -1,4 +1,4 @@
-import { createBrowserRouter, Route, RouterProvider, Routes } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import DashBoard from './DashBoard/DashBoard'
 import People from './DashBoard/People'
 import PaySlip from './DashBoard/PaySlip'
@@ -8,6 +8,8 @@ import Performance from './DashBoard/Performance'
 import PersonalDetails from './DashBoard/PersonalDetails'
 import JobReferances from './DashBoard/JobReferances'
 import Document from './DashBoard/Document'
+import Settings from './DashBoard/Settings'
+import Support from './DashBoard/Support'
 import Layout from './Components/SideBarLayout/Layout'
 import SignUp from './Pages/SignUp'
 import SignIn from './Pages/SignIn'
@@ -36,11 +38,14 @@ const router = createBrowserRouter([
       { path: 'people', element: <People /> },
       { path: 'payslip', element: <PaySlip /> },
       { path: "timetools", element: <TimeTools />, loader: PolicyLoader },
+      { path: 'benefits', element: <Benefited /> },
       { path: 'benefited', element: <Benefited /> },
       { path: 'performance', element: <Performance /> },
-      { path: 'personalDetails', element: <PersonalDetails /> },
+      { path: 'personaldetails', element: <PersonalDetails /> },
       { path: 'jobref', element: <JobReferances /> },
       { path: 'document', element: <Document /> },
+      { path: 'setting', element: <Settings /> },
+      { path: 'support', element: <Support /> },
     ]
   }
 ])
