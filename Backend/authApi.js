@@ -5,6 +5,12 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 const jwtSecret = process.env.JWT_SECRET || process.env.jwt_secret || "default_secret";
+const isProduction = process.env.NODE_ENV === "production";
+const authCookieOptions = {
+  httpOnly: true,
+  secure: isProduction,
+  sameSite: isProduction ? "none" : "lax",
+};
 
 //Sign Up
 router.post("/signup", async (req, res) => {
@@ -74,9 +80,7 @@ router.post("/signin", async (req, res) => {
     const decoded = jwt.decode(token);
 
     res.cookie("token", token, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+      ...authCookieOptions,
       maxAge: 60 * 60 * 1000
     });
     return res.json({
@@ -95,9 +99,7 @@ router.post("/signin", async (req, res) => {
 // LOGOUT
 router.post("/logout", (req, res) => {
   res.clearCookie("token", {
-    httpOnly: true,
-    secure: false,
-    sameSite: "lax",
+    ...authCookieOptions,
   });
   res.json({ message: "Logged out successfully" });
 });
