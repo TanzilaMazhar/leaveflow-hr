@@ -4,6 +4,8 @@ const pool = require('./db');
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
+const jwtSecret = process.env.JWT_SECRET || process.env.jwt_secret || "default_secret";
+
 //Sign Up
 router.post("/signup", async (req, res) => {
   try {
@@ -66,7 +68,7 @@ router.post("/signin", async (req, res) => {
 
     const token = jwt.sign(
       { id: user.id, email: user.email },
-      process.env.JWT_SECRET || "default_secret",
+      jwtSecret,
       { expiresIn: "1h" }
     );
     const decoded = jwt.decode(token);

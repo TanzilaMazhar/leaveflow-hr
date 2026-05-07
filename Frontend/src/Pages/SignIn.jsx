@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from 'yup';
 import { Loader } from "lucide-react";
+import api from "../api";
 
 const SignInSchema = Yup.object().shape({
   email: Yup.string()
@@ -28,10 +28,7 @@ function SignIn() {
 
   const onSubmit = async (values) => {
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/auth/signin", values,
-        { withCredentials: true }
-      );
+      const res = await api.post("/api/auth/signin", values);
 
       toast.success(res.data.message || "Signed in successfully!");
 

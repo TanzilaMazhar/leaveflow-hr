@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import PolicyTable from './PolicyTable';
 import { useLoaderData } from 'react-router-dom';
-import axios from 'axios';
 import toast from 'react-hot-toast';
 import Loader from '../../Components/Loader';
+import api from '../../api';
 
 const typeOptions = ["Sick", "Casual", "Annual"];
 
@@ -42,11 +42,7 @@ function TimeTools() {
         }
 
         try {
-            const res = await axios.post(
-                "http://localhost:5000/api/policies",
-                newPolicy,
-                { withCredentials: true }
-            );
+            const res = await api.post("/api/policies", newPolicy);
             setPolicies([res.data, ...policies]);
             closeModal();
             toast.success("Leave request submitted successfully!");
@@ -75,14 +71,13 @@ function TimeTools() {
 
         try {
             const isoDate = new Date(newPolicy.policy_date).toISOString().split('T')[0];
-            const res = await axios.put(
-                `http://localhost:5000/api/policies/${editingPolicy.id}`,
+            const res = await api.put(
+                `/api/policies/${editingPolicy.id}`,
                 {
                     title: newPolicy.title,
                     policy_date: isoDate,
                     type: newPolicy.type
-                },
-                { withCredentials: true }
+                }
             );
 
             setPolicies(prev =>
@@ -110,7 +105,7 @@ function TimeTools() {
                             className="rounded bg-red-600 px-2 py-1 text-white"
                             onClick={async () => {
                                 try {
-                                    await axios.delete(`http://localhost:5000/api/policies/${policyId}`, { withCredentials: true });
+                                    await api.delete(`/api/policies/${policyId}`);
                                     setPolicies(prev => prev.filter(p => p.id !== policyId));
                                     toast.success("Leave request deleted successfully!");
                                 } catch (err) {

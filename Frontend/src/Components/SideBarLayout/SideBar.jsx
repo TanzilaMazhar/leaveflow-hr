@@ -9,7 +9,7 @@ import { Search } from 'lucide-react';
 import { Newspaper } from 'lucide-react';
 import { NavLink } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom';
-import axios from "axios";
+import api from "../../api";
 
 function SideBar({ onLinkClick }) {
 
@@ -20,11 +20,7 @@ function SideBar({ onLinkClick }) {
 
     const handleLogout = async () => {
         try {
-            await axios.post(
-                "http://localhost:5000/api/auth/logout",
-                {},
-                { withCredentials: true }
-            );
+            await api.post("/api/auth/logout", {});
 
             localStorage.removeItem("LoggedIn");
             localStorage.removeItem("user");

@@ -1,11 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { useForm } from 'react-hook-form';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Loader } from "lucide-react";
+import api from "../api";
 
 const signupSchema = z.object({
   name: z
@@ -51,15 +51,14 @@ function SignUp() {
   const onSubmit = async (values) => {
     try {
       // Backend request
-      const res = await axios.post(
-        "http://localhost:5000/api/auth/signup",
+      const res = await api.post(
+        "/api/auth/signup",
         {
           name: values.name,
           email: values.email,
           password: values.password,
           confirmPassword: values.confirmPassword,
-        },
-        { withCredentials: true }
+        }
       );
 
       toast.success(res.data.message || "Account created successfully!");
