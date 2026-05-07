@@ -8,7 +8,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
 const port = process.env.PORT || process.env.port || 5000;
-const allowedOrigins = (process.env.CLIENT_URL || "http://localhost:5173")
+const allowedOrigins = (process.env.CLIENT_URL || "http://localhost:5173,https://leaveflow-hr.vercel.app")
     .split(",")
     .map((origin) => origin.trim())
     .filter(Boolean);
