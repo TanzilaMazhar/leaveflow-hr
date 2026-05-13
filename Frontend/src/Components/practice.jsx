@@ -25,7 +25,7 @@ function SideBar({ onLinkClick }) {
                     <span className="bg-purple-600 p-2 text-white rounded-lg">
                         <Landmark />
                     </span>
-                    <span className="font-bold text-xl text-gray-900">MarcoHR</span>
+                    <span className="font-bold text-xl text-gray-900">Employee Portal</span>
                 </div>
                 <PanelRight />
             </div>

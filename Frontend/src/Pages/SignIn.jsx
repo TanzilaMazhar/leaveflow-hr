@@ -5,6 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from 'yup';
 import { Loader } from "lucide-react";
 import api from "../api";
+import { saveAuthSession } from "../authSession";
 
 const SignInSchema = Yup.object().shape({
   email: Yup.string()
@@ -32,8 +33,7 @@ function SignIn() {
 
       toast.success(res.data.message || "Signed in successfully!");
 
-      localStorage.setItem("LoggedIn", "true");
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+      saveAuthSession(res.data.user, res.data.exp);
       navigate("/dashboard");
     } catch (err) {
       toast.error(err.response?.data?.error || "Invalid credentials");

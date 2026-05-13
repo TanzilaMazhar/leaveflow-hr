@@ -29,12 +29,10 @@ const signupSchema = z.object({
       "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character"
     ),
 
-  confirmPassword: z
-    .string({ required_error: "Confirm Password is required" })
-    .refine((data) => data.password === data.confirmPassword, {
-      message: "Passwords do not match",
-      path: ["confirmPassword"],
-    })
+  confirmPassword: z.string({ required_error: "Confirm Password is required" })
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords do not match",
+  path: ["confirmPassword"],
 });
 function SignUp() {
   const navigate = useNavigate();

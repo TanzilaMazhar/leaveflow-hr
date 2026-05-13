@@ -1,5 +1,6 @@
 import api from "../../api";
 import { redirect } from "react-router-dom";
+import { clearAuthSession } from "../../authSession";
 
 
 export default async function PolicyLoader() {
@@ -9,8 +10,7 @@ export default async function PolicyLoader() {
     } catch (error) {
         console.error("Error fetching policies:", error);
         if (error.response?.status === 401) {
-            localStorage.removeItem("LoggedIn");
-            localStorage.removeItem("user");
+            clearAuthSession();
             throw redirect("/signin");
         }
         return [];

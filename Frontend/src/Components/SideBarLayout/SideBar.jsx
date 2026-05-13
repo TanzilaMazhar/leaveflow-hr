@@ -10,6 +10,7 @@ import { Newspaper } from 'lucide-react';
 import { NavLink } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom';
 import api from "../../api";
+import { clearAuthSession } from '../../authSession';
 
 function SideBar({ onLinkClick }) {
 
@@ -21,12 +22,11 @@ function SideBar({ onLinkClick }) {
     const handleLogout = async () => {
         try {
             await api.post("/api/auth/logout", {});
-
-            localStorage.removeItem("LoggedIn");
-            localStorage.removeItem("user");
-            navigate("/signin");
         } catch (err) {
             console.error("Logout failed:", err);
+        } finally {
+            clearAuthSession();
+            navigate("/signin", { replace: true });
         }
     };
 
@@ -35,7 +35,7 @@ function SideBar({ onLinkClick }) {
             <div className='flex justify-between items-center py-8 px-4 shrink-0'>
                 <div className='flex items-center gap-3'>
                     <span className='bg-purple-600 p-2 text-white rounded rounded-lg'> <Landmark /></span>
-                    <span className='font-bold text-xl text-gray-900'>MarcoHR</span>
+                    <span className='font-bold text-xl text-gray-900'>Employee Portal</span>
                 </div>
                 <PanelRight />
             </div>
@@ -59,7 +59,7 @@ function SideBar({ onLinkClick }) {
                             className={({ isActive }) =>
                                 `flex items-center gap-2 p-2 rounded hover:bg-gray-200 ${isActive ? 'bg-gray-200' : ''} `}>
                             <Users />
-                            <span>People</span>
+                            <span>Team</span>
                         </NavLink>
                     </li>
                     <li className='mb-2'>
@@ -119,7 +119,7 @@ function SideBar({ onLinkClick }) {
                             {({ isActive }) => (
                                 <>
                                     <Search className={isActive ? "text-purple-900" : ""} />
-                                    <span>Job & References</span>
+                                    <span>Job Info</span>
                                 </>
                             )}
                         </NavLink>

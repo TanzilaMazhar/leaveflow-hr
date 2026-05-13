@@ -3,9 +3,9 @@ import { CircleHelp, Plus, Search, Send } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 const initialTickets = [
-  { id: 1, title: 'Payslip correction', requester: 'Ayesha Khan', category: 'Payroll', priority: 'High', status: 'Open' },
-  { id: 2, title: 'Leave balance issue', requester: 'Bilal Ahmed', category: 'Leave', priority: 'Medium', status: 'Review' },
-  { id: 3, title: 'Document upload problem', requester: 'Sara Malik', category: 'Documents', priority: 'Low', status: 'Resolved' },
+  { id: 1, title: 'Payslip correction', requester: 'Me', category: 'Payroll', priority: 'High', status: 'Open' },
+  { id: 2, title: 'Leave balance issue', requester: 'Me', category: 'Leave', priority: 'Medium', status: 'Review' },
+  { id: 3, title: 'Document upload problem', requester: 'Me', category: 'Documents', priority: 'Low', status: 'Resolved' },
 ]
 
 function Support() {
@@ -70,7 +70,7 @@ function Support() {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-xl font-bold text-gray-800">Support</h1>
-          <p className="text-md text-gray-700">Track HR help requests for payroll, leave, documents, and employee access.</p>
+          <p className="text-md text-gray-700">Create and track your help requests for payroll, leave, documents, and account access.</p>
         </div>
         <button
           type="button"
@@ -114,7 +114,7 @@ function Support() {
             <thead className="bg-gray-50 text-xs uppercase text-gray-500">
               <tr>
                 <th className="px-5 py-3 font-semibold">Ticket</th>
-                <th className="px-5 py-3 font-semibold">Requester</th>
+                <th className="px-5 py-3 font-semibold">Created by</th>
                 <th className="px-5 py-3 font-semibold">Category</th>
                 <th className="px-5 py-3 font-semibold">Priority</th>
                 <th className="px-5 py-3 font-semibold">Status</th>
@@ -165,7 +165,7 @@ function Support() {
                 />
               </label>
               <label className="block">
-                <span className="mb-1 block text-sm font-medium text-gray-700">Requester</span>
+                <span className="mb-1 block text-sm font-medium text-gray-700">Created by</span>
                 <input
                   value={form.requester}
                   onChange={(event) => updateForm('requester', event.target.value)}

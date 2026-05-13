@@ -138,7 +138,7 @@ function TimeTools() {
                 <div className='flex items-center justify-between'>
                     <div>
                         <h1 className='text-xl font-bold text-gray-800'>Time & Leave</h1>
-                        <p className='text-md text-gray-700'>Manage employee leave requests, policy limits, and attendance planning.</p>
+                        <p className='text-md text-gray-700'>View your attendance summary and submit your own leave requests.</p>
                     </div>
                     <button className='h-8 cursor-pointer rounded-md bg-purple-600 px-3 text-white hover:bg-purple-700'>
                         Get the app

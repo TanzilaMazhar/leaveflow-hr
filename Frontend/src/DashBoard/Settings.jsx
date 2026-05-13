@@ -3,14 +3,13 @@ import { Bell, CalendarDays, RotateCcw, Save, Shield, Users } from 'lucide-react
 import toast from 'react-hot-toast'
 
 const defaultSettings = {
-  companyName: 'MarcoHR',
+  portalName: 'Employee Portal',
   leaveCycle: 'Joining date',
   payrollCurrency: 'USD',
   sickLimit: 16,
   casualLimit: 12,
   annualLimit: 14,
   emailAlerts: true,
-  managerApproval: true,
   twoFactor: false,
 }
 
@@ -27,8 +26,8 @@ function Settings() {
   }
 
   const handleSave = () => {
-    if (!settings.companyName.trim()) {
-      toast.error('Company name is required')
+    if (!settings.portalName.trim()) {
+      toast.error('Portal name is required')
       return
     }
 
@@ -50,7 +49,7 @@ function Settings() {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-xl font-bold text-gray-800">Settings</h1>
-          <p className="text-md text-gray-700">Configure company rules, leave limits, approvals, and security.</p>
+          <p className="text-md text-gray-700">Manage your account preferences, leave summary, notifications, and security.</p>
         </div>
         <div className="flex gap-2">
           <button
@@ -75,14 +74,14 @@ function Settings() {
           <div className="rounded-lg border border-gray-200 bg-white p-5">
             <div className="mb-4 flex items-center gap-2">
               <Users className="h-5 w-5 text-purple-700" />
-              <h2 className="text-base font-semibold text-gray-900">Workspace</h2>
+              <h2 className="text-base font-semibold text-gray-900">My portal</h2>
             </div>
             <div className="grid gap-4 md:grid-cols-3">
               <label className="block">
-                <span className="mb-1 block text-sm font-medium text-gray-700">Company name</span>
+                <span className="mb-1 block text-sm font-medium text-gray-700">Portal name</span>
                 <input
-                  value={settings.companyName}
-                  onChange={(event) => updateSetting('companyName', event.target.value)}
+                  value={settings.portalName}
+                  onChange={(event) => updateSetting('portalName', event.target.value)}
                   className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-purple-500 focus:outline-none"
                 />
               </label>
@@ -115,7 +114,7 @@ function Settings() {
           <div className="rounded-lg border border-gray-200 bg-white p-5">
             <div className="mb-4 flex items-center gap-2">
               <CalendarDays className="h-5 w-5 text-purple-700" />
-              <h2 className="text-base font-semibold text-gray-900">Leave rules</h2>
+              <h2 className="text-base font-semibold text-gray-900">My leave allowance</h2>
             </div>
             <div className="grid gap-4 md:grid-cols-3">
               {[
@@ -130,8 +129,8 @@ function Settings() {
                     min="0"
                     max="42"
                     value={settings[key]}
-                    onChange={(event) => updateSetting(key, event.target.value)}
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-purple-500 focus:outline-none"
+                    readOnly
+                    className="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-sm text-gray-700 focus:outline-none"
                   />
                 </label>
               ))}
@@ -145,16 +144,16 @@ function Settings() {
             <TogglePanel
               icon={<Bell className="h-5 w-5 text-purple-700" />}
               title="Notifications"
-              text="Send email alerts for leave approvals and payroll updates."
+              text="Receive alerts for leave, payroll, documents, and account updates."
               checked={settings.emailAlerts}
               onChange={() => updateSetting('emailAlerts', !settings.emailAlerts)}
             />
             <TogglePanel
               icon={<Shield className="h-5 w-5 text-purple-700" />}
-              title="Manager approval"
-              text="Require manager approval before leave requests are confirmed."
-              checked={settings.managerApproval}
-              onChange={() => updateSetting('managerApproval', !settings.managerApproval)}
+              title="Account security"
+              text="Add an extra security preference for your employee account."
+              checked={settings.twoFactor}
+              onChange={() => updateSetting('twoFactor', !settings.twoFactor)}
             />
           </div>
         </section>
@@ -162,12 +161,12 @@ function Settings() {
         <aside className="rounded-lg border border-gray-200 bg-white p-5">
           <h2 className="text-base font-semibold text-gray-900">Configuration summary</h2>
           <div className="mt-4 space-y-3 text-sm">
-            <SummaryRow label="Company" value={settings.companyName || 'Not set'} />
+            <SummaryRow label="Portal" value={settings.portalName || 'Not set'} />
             <SummaryRow label="Cycle" value={settings.leaveCycle} />
             <SummaryRow label="Currency" value={settings.payrollCurrency} />
             <SummaryRow label="Leave total" value={`${totalLeave} days`} />
             <SummaryRow label="Email alerts" value={settings.emailAlerts ? 'On' : 'Off'} />
-            <SummaryRow label="Approvals" value={settings.managerApproval ? 'Required' : 'Optional'} />
+            <SummaryRow label="Security" value={settings.twoFactor ? 'Extra check on' : 'Standard'} />
           </div>
         </aside>
       </div>
